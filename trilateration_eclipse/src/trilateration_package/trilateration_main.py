@@ -44,9 +44,9 @@ def trilaterate2D(separation, distance1, distance2):
     y1 = 'Undefined'
     y2 = 'Undefined'
     if (separation > 0):
-        x = (distance1**2 - distance2**2 + separation**2) / (2 * separation);
-        y1 = (distance1**2 - x**2)**0.5;
-        y2 = -1*(distance1**2 - x**2)**0.5;
+        x = (distance1**2 - distance2**2 + separation**2) / (2 * separation)
+        y1 = (distance1**2 - x**2)**0.5
+        y2 = -1*(distance1**2 - x**2)**0.5
     else:
         print('Separation is 0 or less please define a positive separation')
     return x, y1, y2
@@ -61,32 +61,32 @@ and calls the logic to perform the trilateration calculation
 '''
 def dothecalculation(separation, distance1, distance2):
     print('Trilateration Calculation For 2D Cartesian Coordinates\n')
-    print('Input\nSeparation defined between measurement points = ', separation, 'm');
-    print('Distance between object and measurement point 1 = ', distance1, 'm');
-    print('Distance between object and measurement point 2 = ', distance2, 'm\n');
-    print('Object positions defined based on a coordinate system where...');
+    print('Input\nSeparation defined between measurement points = ', separation, 'm')
+    print('Distance between object and measurement point 1 = ', distance1, 'm')
+    print('Distance between object and measurement point 2 = ', distance2, 'm\n')
+    print('Object positions defined based on a coordinate system where...')
     
-    print('a) measurement point 1 is at the origin');
-    print('b) measurement point 2 is on the y axis\n');
+    print('a) measurement point 1 is at the origin')
+    print('b) measurement point 2 is on the y axis\n')
     
-    print('Output');
-    x,y1,y2 = trilaterate2D(separation, distance1, distance2);
-    print('Object Position x value ', x);
-    print('Object Position y possible value 1 ', y1);
-    print('Object Position y possible value 2 ', y2);    
+    print('Output')
+    x,y1,y2 = trilaterate2D(separation, distance1, distance2)
+    print('Object Position x value ', x)
+    print('Object Position y possible value 1 ', y1)
+    print('Object Position y possible value 2 ', y2)    
 
 if __name__ == '__main__':
     # create agrmunent parser
-    parser = argparse.ArgumentParser(description='Perform 2D Trilateration');
+    parser = argparse.ArgumentParser(description='Perform 2D Trilateration')
  
     # add arguments to the argument parser
-    parser.add_argument('separation', type=float, help='Separation in metres between measurement points');
-    parser.add_argument('distance1', type=float, help='Distance in m between object and measurement point 1');
-    parser.add_argument('distance2', type=float, help='Distance in m between object and measurement point 2');
+    parser.add_argument('separation', type=float, help='Separation in metres between measurement points')
+    parser.add_argument('distance1', type=float, help='Distance in m between object and measurement point 1')
+    parser.add_argument('distance2', type=float, help='Distance in m between object and measurement point 2')
  
     # parse the arguments from the command line
-    args = parser.parse_args();
-    dothecalculation(args.separation, args.distance1, args.distance2);
+    args = parser.parse_args()
+    dothecalculation(args.separation, args.distance1, args.distance2)
     
 
     
