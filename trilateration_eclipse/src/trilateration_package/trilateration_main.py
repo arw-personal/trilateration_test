@@ -16,6 +16,8 @@ positions can be specified
 d) add a better front end than just command line!
 '''
 import argparse
+import numpy as np
+import matplotlib.pyplot as plt
 
 '''
 param separation = separation between the two recievers
@@ -55,6 +57,60 @@ def trilaterate2D(separation, distance1, distance2):
 param separation = separation between the two recievers
 param distance1 = distance between object and reciever 1
 param distance2 = distance between object and reciever 2
+param x = x position of the result
+param y1 = 1st possible y position of the result
+param y2 = 2nd possible y position of the result
+Purpose is to plot the input data and output results from the trilateration process
+'''
+def plotit(separation, distance1, distance2, x, y1, y2):
+    #setup grid, title and axes labels
+    plt.grid(True)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Trilateration Result')    
+    #plot input position 1 and 2
+    plt.plot([0],[0],marker='.',markerfacecolor='green',markeredgecolor='green',markersize=13.0,label='Measurement Position 1')
+    plt.plot([separation],[0],marker='.',markerfacecolor='orange',markeredgecolor='orange',markersize=13.0,label='Measurement Position 2')
+    
+    #plot distance circle
+    circlexpos1=np.arange((-1*distance1),(distance1),0.001)
+    circleypos1 = circlexpos1.copy()
+    circleypos1neg = circlexpos1.copy()
+    
+    circlexpos2 = np.arange((separation-distance2),(separation+distance2),0.001)
+    circleypos2 = circlexpos2.copy()
+    circleypos2neg = circlexpos2.copy()
+      
+    circindex=0 
+    for i in circlexpos1:
+        ypos=(distance1**2 - circlexpos1[circindex]**2)**0.5
+        circleypos1[circindex]=ypos
+        circleypos1neg[circindex]=-1*ypos
+        circindex = circindex + 1
+    
+    circindex=0
+    for i in circlexpos2:
+        ypos=(distance2**2 - (circlexpos2[circindex]-separation)**2)**0.5
+        circleypos2[circindex]=ypos
+        circleypos2neg[circindex]=-1*ypos
+        circindex = circindex + 1
+
+    plt.plot(circlexpos1,circleypos1,color='green',dashes=[1,1,1,1],label='Distance From Measurement Position 1')
+    plt.plot(circlexpos1,circleypos1neg,color='green',dashes=[1,1,1,1])
+    plt.plot(circlexpos2,circleypos2,color='orange',dashes=[1,1,1,1],label='Distance From Measurement Position 2')
+    plt.plot(circlexpos2,circleypos2neg,color='orange',dashes=[1,1,1,1])
+        
+    #plot measured position
+    plt.plot([x],[y1],marker='+',markeredgecolor='blue',markersize=13.0,label='Measured Object Positions')
+    plt.plot([x],[y2],marker='+',markeredgecolor='blue',markersize=13.0)
+    lg = plt.legend(bbox_to_anchor=(1.05, 1))
+    plt.savefig('trilateration_result.png', dpi=300, format='png', bbox_extra_artists=(lg,), bbox_inches='tight')
+    
+    
+'''
+param separation = separation between the two recievers
+param distance1 = distance between object and reciever 1
+param distance2 = distance between object and reciever 2
 Purpose is to give information on input data and output results
 and calls the logic to perform the trilateration calculation
 
@@ -73,7 +129,8 @@ def dothecalculation(separation, distance1, distance2):
     x,y1,y2 = trilaterate2D(separation, distance1, distance2)
     print('Object Position x value ', x)
     print('Object Position y possible value 1 ', y1)
-    print('Object Position y possible value 2 ', y2)    
+    print('Object Position y possible value 2 ', y2)
+    plotit(separation, distance1, distance2, x, y1, y2)
 
 if __name__ == '__main__':
     # create agrmunent parser
@@ -87,6 +144,25 @@ if __name__ == '__main__':
     # parse the arguments from the command line
     args = parser.parse_args()
     dothecalculation(args.separation, args.distance1, args.distance2)
-    
 
-    
+    # plt.plot([2,3,4,5],[3,8,10,12],'gs')
+    # plt.axis([0,7,0,21])
+    # 
+    # 
+    # t=np.arange(0,5,0.2)
+    #plt.plot(t,t,'r--',t,t**3,'b^',t,t**2,'gs')
+    #data={'a':np.arange(50),'c':np.random.randint(0,50,50),'d':np.random.randn(50)}
+    #data['b']=data['a']+10*np.random.randn(50)
+    #data['d']=np.abs(data['d'])*100
+    #plt.scatter('a','b',c='c',s='d',data=data)
+    #names=["Dingos","Wild Cats","Tigers"]
+    #values=[1,11,111]
+    #plt.figure(1,figsize=(9,3))
+    #plt.subplot(131)
+    #plt.bar(names,values)
+    #plt.subplot(132)
+    #plt.scatter(names,values)
+    #plt.subplot(133)
+    #plt.plot(names,values)
+    #plt.suptitle('Varsity')
+    #plt.show()
